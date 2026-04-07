@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.muhammadrafinovandi0108.sleepquality.model.Emoji
 import com.muhammadrafinovandi0108.sleepquality.ui.theme.SleepQualityTheme
 
 class MainActivity : ComponentActivity() {
@@ -39,6 +40,12 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
+    val data = listOf(
+        Emoji("Kurang", R.drawable.kurang),
+        Emoji("Cukup", R.drawable.cukup),
+        Emoji("Ideal", R.drawable.ideal),
+    )
+
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
