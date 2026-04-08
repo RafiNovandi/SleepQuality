@@ -1,15 +1,20 @@
 <resources>
     <string name="app_name">SleepQuality</string>
-    <string name="app_intro">Cek kualitas tidurmu sekarang!</string>
-    <string name="jam_tidur">Jam Tidur</string>
-    <string name="jam_bangun">Jam Bangun</string>
-    <string name="masukan_jam">Masukan Jam</string>
-    <string name="anak">Anak</string>
-    <string name="remaja">Remaja</string>
-    <string name="dewasa">Dewasa</string>
-    <string name="hitung">Hitung</string>
-    <string name="kurang">Kurang</string>
-    <string name="cukup">Cukup</string>
+    <string name="app_intro">Check your sleep quality now!</string>
+    <string name="jam_tidur">Sleep Time</string>
+    <string name="jam_bangun">Wake Up Time</string>
+    <string name="masukan_jam">Enter Time</string>
+    <string name="anak">Children</string>
+    <string name="remaja">Teenager</string>
+    <string name="dewasa">Adult</string>
+    <string name="hitung">Count</string>
+    <string name="kurang">Poor</string>
+    <string name="cukup">Enough</string>
     <string name="ideal">Ideal</string>
-    <string name="input_invalid">Tidak boleh kosong.</string>
+    <string name="input_invalid">annot be empty.</string>
+    <string name="tentang_aplikasi">About Application</string>
+    <string name="copyright">This application aims to help users evaluate their sleep quality simply, allowing them to determine if it is ideal or not. \\n\\nMade by Muhammad Rafi Novandi.</string>
+    <string name="kembali">Back</string>
+    <string name="bagikan">Shere</string>
+    <string name="bagikan_template">Sleep Time: %1$s \\nWake Up Time: %2$s \\nAge Category: %3$s \\nSleep Duration: %4$d Hour %5$d Minute \\nKualitas Tidur: %6$s</string>
 </resources>

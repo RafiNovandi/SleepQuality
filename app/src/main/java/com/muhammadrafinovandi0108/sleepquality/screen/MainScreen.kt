@@ -1,5 +1,7 @@
 package com.muhammadrafinovandi0108.sleepquality.screen
 
+import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -18,9 +20,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -34,6 +38,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,22 +50,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.muhammadrafinovandi0108.sleepquality.R
-import com.muhammadrafinovandi0108.sleepquality.model.Emoji
+import com.muhammadrafinovandi0108.sleepquality.navigasi.Screen
 import com.muhammadrafinovandi0108.sleepquality.ui.theme.SleepQualityTheme
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
-    val data = listOf(
-        Emoji("Kurang", R.drawable.kurang),
-        Emoji("Cukup", R.drawable.cukup),
-        Emoji("Ideal", R.drawable.ideal),
-    )
-
+fun MainScreen(navController: NavHostController) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
@@ -71,7 +72,19 @@ fun MainScreen() {
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = Color.White,
-                )
+                ),
+                actions = {
+                    IconButton(onClick = {
+                        navController.navigate(Screen.About.route)
+                    }) {
+                        Icon(
+                            imageVector = Icons.Outlined.Info,
+                            contentDescription = stringResource(R.string.tentang_aplikasi),
+                            tint = Color.White,
+
+                        )
+                    }
+                }
             )
         }
     ) { innerPadding ->
@@ -86,24 +99,24 @@ fun ScreenContent(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val activity = context as? androidx.appcompat.app.AppCompatActivity
 
-    val jamTidur = remember { mutableIntStateOf(0) }
-    val menitTidur = remember { mutableIntStateOf(0) }
+    val jamTidur = rememberSaveable { mutableIntStateOf(0) }
+    val menitTidur = rememberSaveable { mutableIntStateOf(0) }
 
-    val jamBangun = remember { mutableIntStateOf(0) }
-    val menitBangun = remember {mutableIntStateOf(0)}
+    val jamBangun = rememberSaveable { mutableIntStateOf(0) }
+    val menitBangun = rememberSaveable {mutableIntStateOf(0)}
 
-    val waktuBangun = remember { mutableStateOf("Masukan Jam") }
-    val waktuTidur = remember { mutableStateOf("Masukan Jam") }
+    val waktuBangun = rememberSaveable { mutableStateOf("Masukan Jam") }
+    val waktuTidur = rememberSaveable { mutableStateOf("Masukan Jam") }
 
     val radioOptions =listOf(
         stringResource(id = R.string.anak),
         stringResource(id = R.string.remaja),
         stringResource(id = R.string.dewasa)
     )
-    var kelompok by remember {mutableStateOf(radioOptions[0])}
+    var kelompok by rememberSaveable {mutableStateOf(radioOptions[0])}
 
-    var statusTidur by remember { mutableIntStateOf(0)}
-    var durasiTidur by remember { mutableIntStateOf(0) }
+    var statusTidur by rememberSaveable { mutableIntStateOf(0)}
+    var durasiTidur by rememberSaveable { mutableIntStateOf(0) }
 
     var jamTidurError by remember { mutableStateOf(false) }
     var jamBangunError by remember { mutableStateOf(false) }
@@ -207,13 +220,13 @@ fun ScreenContent(modifier: Modifier = Modifier) {
                 jamBangunError = (waktuBangun.value == "Masukan Jam")
                 if (jamTidurError || jamBangunError) return@Button
 
-                val durasi = hitungDurasi(
+                val totalMenit = hitungDurasi(
                     jamTidur.intValue, menitTidur.intValue,
                     jamBangun.intValue, menitBangun.intValue
                 )
 
-                durasiTidur = durasi
-                statusTidur = getTidurStatus(durasi, kelompok, radioOptions)
+                durasiTidur = totalMenit
+                statusTidur = getTidurStatus(totalMenit / 60, kelompok, radioOptions)
 
             },
             modifier = Modifier.padding(top = 8.dp),
@@ -223,7 +236,16 @@ fun ScreenContent(modifier: Modifier = Modifier) {
         }
 
         if (statusTidur !=0 ){
+
             val emojiResource = emoji(statusTidur)
+
+            val jam = durasiTidur / 60
+            val menit = durasiTidur % 60
+            val statusTeks = stringResource(statusTidur)
+
+            val message = stringResource(R.string.bagikan_template,
+                waktuTidur.value, waktuBangun.value, kelompok, jam, menit, statusTeks
+            )
 
             if (emojiResource != 0) {
                 Image(
@@ -236,7 +258,7 @@ fun ScreenContent(modifier: Modifier = Modifier) {
                 )
             }
             Text(
-                text = "Durasi Tidur: $durasiTidur Jam",
+                text = "Durasi Tidur: $jam Jam $menit Menit",
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(top = 8.dp)
             )
@@ -245,6 +267,13 @@ fun ScreenContent(modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.primary
             )
+            Button(
+                onClick = { shareData(context, message)},
+                modifier = Modifier.padding(top = 8.dp),
+                contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
+            ) {
+                Text(text = stringResource(R.string.bagikan))
+            }
         }
     }
 }
@@ -287,8 +316,7 @@ private fun hitungDurasi(jTidur: Int, mTidur: Int, jBangun: Int, mBangun: Int): 
         totalMenitBangun += 24 * 60
     }
 
-    val selisihMenit = totalMenitBangun - totalMenitTidur
-    return selisihMenit / 60
+    return totalMenitBangun - totalMenitTidur
 }
 
 private fun getTidurStatus (durasi: Int, kategori: String, options: List<String>): Int {
@@ -326,6 +354,16 @@ private fun emoji(statusId: Int): Int {
     }
 }
 
+private fun shareData(context: Context, message: String) {
+    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_TEXT, message)
+    }
+    if (shareIntent.resolveActivity(context.packageManager) != null) {
+        context.startActivity(shareIntent)
+    }
+}
+
 
 
 
@@ -335,6 +373,6 @@ private fun emoji(statusId: Int): Int {
 @Composable
 fun MainScreenPreview() {
     SleepQualityTheme {
-        MainScreen()
+        MainScreen(rememberNavController())
     }
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SleepQuality</string>
+    <string name="app_intro">Cek kualitas tidurmu sekarang!</string>
+    <string name="jam_tidur">Jam Tidur</string>
+    <string name="jam_bangun">Jam Bangun</string>
+    <string name="masukan_jam">Masukan Jam</string>
+    <string name="anak">Anak</string>
+    <string name="remaja">Remaja</string>
+    <string name="dewasa">Dewasa</string>
+    <string name="hitung">Hitung</string>
+    <string name="kurang">Kurang</string>
+    <string name="cukup">Cukup</string>
+    <string name="ideal">Ideal</string>
+    <string name="input_invalid">Tidak boleh kosong.</string>
+    <string name="tentang_aplikasi">Tentang Aplikasi</string>
+    <string name="copyright">Aplikasi ini bertujuan untuk membantu pengguna mengevaluasi kualitas tidur secara sederhana. Sehingga pengguna dapat mengetahui bahwa kualitas tidurnya sudah ideal atau belum. \n\nDibuat Oleh Muhammad Rafi Novandi</string>
+    <string name="kembali">Kembali</string>
+    <string name="bagikan">Bagikan</string>
+    <string name="bagikan_template">Jam Tidur: %1$s \nJam Bangun: %2$s \nKategori Umur: %3$s \nDurasi Tidur: %4$d Jam %5$d Menit \nKualitas Tidur: %6$s</string>
+</resources>
