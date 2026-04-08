@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">SleepQuality</string>
+    <string name="app_intro">Cek kualitas tidurmu sekarang!</string>
+    <string name="jam_tidur">Jam Tidur</string>
+    <string name="jam_bangun">Jam Bangun</string>
+    <string name="masukan_jam">Masukan Jam</string>
+    <string name="anak">Anak</string>
+    <string name="remaja">Remaja</string>
+    <string name="dewasa">Dewasa</string>
+    <string name="hitung">Hitung</string>
+    <string name="kurang">Kurang</string>
+    <string name="cukup">Cukup</string>
+    <string name="ideal">Ideal</string>
+    <string name="input_invalid">Tidak boleh kosong.</string>
 </resources>
