@@ -22,4 +22,9 @@
     <string name="bedtime">Jam Tidur</string>
     <string name="trash">Sampah</string>
     <string name="input_jam">Input Jam</string>
+    <string name="edit_jam">Edit Jam</string>
+    <string name="list_kosong">Belum ada data</string>
+    <string name="x.diklik">%1$s diklik!</string>
+    <string name="riwayat_tidur">Riwayat Tidur</string>
+    <string name="sampah">Sampah</string>
 </resources>

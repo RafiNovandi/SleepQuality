@@ -21,4 +21,9 @@
     <string name="bedtime">Bedtime</string>
     <string name="trash">Trash</string>
     <string name="input_jam">Input Time</string>
+    <string name="edit_jam">Edit Time</string>
+    <string name="list_kosong">No data found</string>
+    <string name="x.diklik">%1$s click!</string>
+    <string name="riwayat_tidur">Sleep History</string>
+    <string name="sampah">Trash</string>
 </resources>

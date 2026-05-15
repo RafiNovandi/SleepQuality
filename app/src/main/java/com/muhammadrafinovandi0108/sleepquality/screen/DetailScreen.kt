@@ -34,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -50,17 +51,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.muhammadrafinovandi0108.sleepquality.R
-import com.muhammadrafinovandi0108.sleepquality.ui.theme.SleepQualityTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import com.muhammadrafinovandi0108.sleepquality.R
+import com.muhammadrafinovandi0108.sleepquality.ui.theme.SleepQualityTheme
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen(navController: NavHostController) {
+fun DetailScreen(navController: NavHostController, id: Long? = null) {
     val context = LocalContext.current
     val activity = context as? androidx.appcompat.app.AppCompatActivity
 
@@ -80,11 +82,39 @@ fun DetailScreen(navController: NavHostController) {
     )
     var kelompok by rememberSaveable {mutableStateOf(radioOptions[0])}
 
-    var statusTidur by rememberSaveable { mutableIntStateOf(0)}
+    var statusTidur by rememberSaveable { mutableIntStateOf(0) }
     var durasiTidur by rememberSaveable { mutableIntStateOf(0) }
 
     var jamTidurError by remember { mutableStateOf(false) }
     var jamBangunError by remember { mutableStateOf(false) }
+
+
+    val viewModel: MainViewModel = viewModel()
+    val isEditMode = id != null
+
+    LaunchedEffect(id) {
+        if (id != null) {
+            val data = viewModel.getDataTidur(id) ?: return@LaunchedEffect
+
+            val (jamT, menitT) = data.jamTidur.split(":")
+            val (jamB, menitB) = data.jamBangun.split(":")
+
+            jamTidur.intValue = jamT.toInt()
+            menitTidur.intValue = menitT.toInt()
+
+            jamBangun.intValue = jamB.toInt()
+            menitBangun.intValue = menitB.toInt()
+
+            waktuTidur.value = data.jamTidur
+            waktuBangun.value = data.jamBangun
+
+            kelompok = data.kategori
+
+            durasiTidur = data.durasi * 60
+            statusTidur = data.status
+        }
+    }
+
 
     Scaffold(
         topBar = {
@@ -101,7 +131,11 @@ fun DetailScreen(navController: NavHostController) {
                     }
                 },
                 title = {
-                    Text(text = stringResource(id = R.string.input_jam))
+                    Text(text = if (isEditMode)
+                        stringResource(R.string.edit_jam)
+                        else
+                        stringResource(R.string.input_jam)
+                    )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -226,25 +260,26 @@ fun DetailScreen(navController: NavHostController) {
                     )
                 }
             }
-            Button(
-                onClick = {
-                    jamTidurError = (waktuTidur.value == "Masukan Jam")
-                    jamBangunError = (waktuBangun.value == "Masukan Jam")
-                    if (jamTidurError || jamBangunError) return@Button
+            if (!isEditMode) {
+                Button(
+                    onClick = {
+                        jamTidurError = (waktuTidur.value == "Masukan Jam")
+                        jamBangunError = (waktuBangun.value == "Masukan Jam")
+                        if (jamTidurError || jamBangunError) return@Button
 
-                    val totalMenit = hitungDurasi(
-                        jamTidur.intValue, menitTidur.intValue,
-                        jamBangun.intValue, menitBangun.intValue
-                    )
+                        val totalMenit = hitungDurasi(
+                            jamTidur.intValue, menitTidur.intValue,
+                            jamBangun.intValue, menitBangun.intValue
+                        )
 
-                    durasiTidur = totalMenit
-                    statusTidur = getTidurStatus(totalMenit / 60, kelompok, radioOptions)
-
-                },
-                modifier = Modifier.padding(top = 8.dp),
-                contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
-            ) {
-                Text(text = stringResource(R.string.hitung))
+                        durasiTidur = totalMenit
+                        statusTidur = getTidurStatus(totalMenit / 60, kelompok, radioOptions)
+                    },
+                    modifier = Modifier.padding(top = 8.dp),
+                    contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
+                ) {
+                    Text(text = stringResource(R.string.hitung))
+                }
             }
 
             if (statusTidur !=0 ){
