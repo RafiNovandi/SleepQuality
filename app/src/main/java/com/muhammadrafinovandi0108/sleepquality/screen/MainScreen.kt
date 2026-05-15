@@ -19,13 +19,23 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bedtime
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.Bedtime
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.RadioButton
@@ -43,6 +53,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -58,10 +69,39 @@ import com.muhammadrafinovandi0108.sleepquality.R
 import com.muhammadrafinovandi0108.sleepquality.navigasi.Screen
 import com.muhammadrafinovandi0108.sleepquality.ui.theme.SleepQualityTheme
 
-
+data class BottomNavigationItem(
+    val title: String,
+    val selectedIcon: ImageVector,
+    val unselectedIcon: ImageVector,
+    val hasNew: Boolean
+)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(navController: NavHostController) {
+    val items = listOf(
+        BottomNavigationItem(
+            title = stringResource(id = R.string.home),
+            selectedIcon = Icons.Filled.Home,
+            unselectedIcon = Icons.Outlined.Home,
+            hasNew = false
+        ),
+        BottomNavigationItem(
+            title = stringResource(id = R.string.bedtime),
+            selectedIcon = Icons.Filled.Bedtime,
+            unselectedIcon = Icons.Outlined.Bedtime,
+            hasNew = false
+        ),
+        BottomNavigationItem(
+            title = stringResource(id = R.string.trash),
+            selectedIcon = Icons.Filled.Delete,
+            unselectedIcon = Icons.Outlined.Delete,
+            hasNew = false
+        )
+    )
+    var selectedItemIndex by rememberSaveable {
+        mutableStateOf(0)
+    }
+
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
@@ -86,6 +126,43 @@ fun MainScreen(navController: NavHostController) {
                     }
                 }
             )
+        },
+        bottomBar = {
+            NavigationBar {
+                items.forEachIndexed { index, item ->
+                    NavigationBarItem(
+                        selected = selectedItemIndex == index,
+                        onClick = {
+                            selectedItemIndex = index
+                            //navController.navigate(item.title)
+                                  },
+                        label = {
+                            Text(text = item.title)
+                        },
+                        icon = {
+                            BadgedBox(
+                                badge = {
+                                    if (item.hasNew){
+                                        Badge ()
+                                    }
+                                }
+                            ) {
+                                Icon(
+                                    imageVector =if (index == selectedItemIndex) {
+                                        item.selectedIcon
+                                    } else {
+                                        item.unselectedIcon
+                                    },
+                                    contentDescription = item.title
+                                )
+                            }
+
+
+                        }
+                    )
+                }
+
+            }
         }
     ) { innerPadding ->
         ScreenContent(Modifier.padding(innerPadding))
@@ -122,7 +199,8 @@ fun ScreenContent(modifier: Modifier = Modifier) {
     var jamBangunError by remember { mutableStateOf(false) }
 
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -150,16 +228,25 @@ fun ScreenContent(modifier: Modifier = Modifier) {
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable{
+                .clickable {
                     activity?.let { act ->
-                        val picker = MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_12H).setHour(jamTidur.intValue).setMinute(menitTidur.intValue).setTitleText("Pilih Jam Tidur").setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK).build()
+                        val picker =
+                            MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_12H)
+                                .setHour(jamTidur.intValue).setMinute(menitTidur.intValue)
+                                .setTitleText("Pilih Jam Tidur")
+                                .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK).build()
 
                         picker.show(act.supportFragmentManager, "TIME_PICKER")
 
                         picker.addOnPositiveButtonClickListener {
                             jamTidur.intValue = picker.hour
                             menitTidur.intValue = picker.minute
-                            waktuTidur.value = String.format(java.util.Locale.getDefault(), "%02d:%02d", picker.hour, picker.minute)
+                            waktuTidur.value = String.format(
+                                java.util.Locale.getDefault(),
+                                "%02d:%02d",
+                                picker.hour,
+                                picker.minute
+                            )
                         }
                     }
 
@@ -182,22 +269,33 @@ fun ScreenContent(modifier: Modifier = Modifier) {
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable{
+                .clickable {
                     activity?.let { act ->
-                        val picker = MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_12H).setHour(jamBangun.intValue).setMinute(menitBangun.intValue).setTitleText("Pilih Jam Tidur").setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK).build()
+                        val picker =
+                            MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_12H)
+                                .setHour(jamBangun.intValue).setMinute(menitBangun.intValue)
+                                .setTitleText("Pilih Jam Tidur")
+                                .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK).build()
 
                         picker.show(act.supportFragmentManager, "TIME_PICKER")
 
                         picker.addOnPositiveButtonClickListener {
                             jamBangun.intValue = picker.hour
                             menitBangun.intValue = picker.minute
-                            waktuBangun.value = String.format(java.util.Locale.getDefault(), "%02d:%02d", picker.hour, picker.minute)
+                            waktuBangun.value = String.format(
+                                java.util.Locale.getDefault(),
+                                "%02d:%02d",
+                                picker.hour,
+                                picker.minute
+                            )
                         }
                     }
                 }
         )
         Row (
-            modifier = Modifier.padding(top = 6.dp).border(1.dp, Color.Gray, RoundedCornerShape(4.dp))
+            modifier = Modifier
+                .padding(top = 6.dp)
+                .border(1.dp, Color.Gray, RoundedCornerShape(4.dp))
         ){
             radioOptions.forEach { text ->
                 KelompokUmurOption(

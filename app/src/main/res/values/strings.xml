@@ -17,4 +17,7 @@
     <string name="kembali">Back</string>
     <string name="bagikan">Shere</string>
     <string name="bagikan_template">Sleep Time: %1$s \\nWake Up Time: %2$s \\nAge Category: %3$s \\nSleep Duration: %4$d Hour %5$d Minute \\nKualitas Tidur: %6$s</string>
+    <string name="home">Home</string>
+    <string name="bedtime">Bedtime</string>
+    <string name="trash">Trash</string>
 </resources>

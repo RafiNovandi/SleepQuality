@@ -18,4 +18,7 @@
     <string name="kembali">Kembali</string>
     <string name="bagikan">Bagikan</string>
     <string name="bagikan_template">Jam Tidur: %1$s \nJam Bangun: %2$s \nKategori Umur: %3$s \nDurasi Tidur: %4$d Jam %5$d Menit \nKualitas Tidur: %6$s</string>
+    <string name="home">Beranda</string>
+    <string name="bedtime">Jam Tidur</string>
+    <string name="trash">Sampah</string>
 </resources>
