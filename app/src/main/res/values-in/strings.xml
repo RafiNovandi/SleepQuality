@@ -27,4 +27,9 @@
     <string name="x.diklik">%1$s diklik!</string>
     <string name="riwayat_tidur">Riwayat Tidur</string>
     <string name="sampah">Sampah</string>
+    <string name="lainnya">Opsi lainnya</string>
+    <string name="hapus">Hapus Data</string>
+    <string name="pesan_hapus">Pindahkan data ini ke sampah?</string>
+    <string name="tombol_hapus">Pindahkan ke Sampah</string>
+    <string name="tombol_batal">Batal</string>
 </resources>

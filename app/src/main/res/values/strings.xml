@@ -26,4 +26,9 @@
     <string name="x.diklik">%1$s click!</string>
     <string name="riwayat_tidur">Sleep History</string>
     <string name="sampah">Trash</string>
+    <string name="lainnya">More Options</string>
+    <string name="hapus">Delete Data</string>
+    <string name="pesan_hapus">Move this data to trash?</string>
+    <string name="tombol_hapus">Move to Trash</string>
+    <string name="tombol_batal">Cencel</string>
 </resources>

@@ -20,8 +20,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -93,6 +96,9 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
 
     val isEditMode = id != null
     var isLoaded by rememberSaveable { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
+    var isSaved by rememberSaveable { mutableStateOf(false) }
+
 
     LaunchedEffect(id) {
         if (id == null || isLoaded) return@LaunchedEffect
@@ -137,6 +143,15 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                         stringResource(R.string.input_jam)
                     )
                 },
+                actions = {
+                    if (id != null) {
+                        DeleteAction (
+                            delete = {
+                                showDialog = true
+                            }
+                        )
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
@@ -144,6 +159,7 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
             )
         }
     ) { padding ->
+
 
         Column(
             modifier = Modifier
@@ -262,6 +278,7 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
             }
             Button(
                 onClick = {
+                    if (isSaved) return@Button
                     jamTidurError = (waktuTidur.value == "Masukan Jam")
                     jamBangunError = (waktuBangun.value == "Masukan Jam")
                     if (jamTidurError || jamBangunError) return@Button
@@ -276,7 +293,7 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
 
                     if (isEditMode) {
                         viewModel.update(
-                            id = id!!,
+                            id = id,
                             jamTidur = waktuTidur.value,
                             jamBangun = waktuBangun.value,
                             kategori = kelompok,
@@ -292,6 +309,7 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                             status = statusTidur
                         )
                     }
+                    isSaved = true
                 },
                 modifier = Modifier.padding(top = 8.dp),
                 contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
@@ -341,8 +359,15 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
             }
         }
     }
+    if (id != null && showDialog) {
+        DisplayAlertDialog(
+            onDismissRequest = { showDialog = false }) {
+            showDialog = false
+            viewModel.delete(id)
+            navController.popBackStack()
+        }
+    }
 }
-
 
 @Composable
 fun KelompokUmurOption(label: String, isSelected: Boolean, modifier: Modifier) {
@@ -356,6 +381,32 @@ fun KelompokUmurOption(label: String, isSelected: Boolean, modifier: Modifier) {
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(start = 8.dp)
         )
+    }
+}
+
+@Composable
+fun DeleteAction(delete: ()-> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+    IconButton(onClick = { expanded = true }) {
+        Icon(
+            imageVector = Icons.Filled.MoreVert,
+            contentDescription = stringResource(R.string.lainnya),
+            tint = MaterialTheme.colorScheme.primary
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false}
+        ) {
+            DropdownMenuItem(
+                text = {
+                    Text(text = stringResource(id = R.string.hapus))
+                },
+                onClick = {
+                    expanded = false
+                    delete()
+                }
+            )
+        }
     }
 }
 
