@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.muhammadrafinovandi0108.sleepquality.screen.AboutScreen
+import com.muhammadrafinovandi0108.sleepquality.screen.DetailScreen
 import com.muhammadrafinovandi0108.sleepquality.screen.MainScreen
 
 @Composable
@@ -19,6 +20,9 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
         }
         composable(route = Screen.About.route) {
             AboutScreen(navController)
+        }
+        composable( route = Screen.Detail.route) {
+            DetailScreen(navController)
         }
     }
 }
