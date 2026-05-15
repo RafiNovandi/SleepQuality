@@ -1,7 +1,12 @@
 package com.muhammadrafinovandi0108.sleepquality.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "datatidur")
 data class DataTidur(
-    val id: Long,
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0L,
     val tanggal: String,
     val jamTidur: String,
     val jamBangun: String,

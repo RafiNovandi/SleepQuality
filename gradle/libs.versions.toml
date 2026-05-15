@@ -13,6 +13,8 @@ composeMaterial = "1.7.8"
 navCompose = "2.9.7"
 ui = "1.11.1"
 vico = "3.1.0"
+ksp = "2.3.4"
+room = "2.8.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -34,6 +36,8 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "composeMaterial" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
 androidx-lifecycle-viewmodel-compose =  { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx"}
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref ="room" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 
 vico-compose = { group = "com.patrykandpatrick.vico", name = "compose", version.ref = "vico" }
 vico-compose-m2 = { group = "com.patrykandpatrick.vico", name = "compose-m2", version.ref = "vico" }
@@ -43,4 +47,5 @@ vico-views = { group = "com.patrykandpatrick.vico", name = "views", version.ref 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+devtools-ksp = { id =  "com.google.devtools.ksp", version.ref = "ksp" }
 
