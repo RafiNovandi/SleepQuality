@@ -8,7 +8,7 @@ import com.muhammadrafinovandi0108.sleepquality.model.DataTidur
 
 @Database(entities = [DataTidur::class], version = 1, exportSchema = false)
 abstract class DataTidurDb : RoomDatabase() {
-    abstract val dao: DataTidurDb
+    abstract val dao: DataTidurDao
 
     companion object {
         @Volatile

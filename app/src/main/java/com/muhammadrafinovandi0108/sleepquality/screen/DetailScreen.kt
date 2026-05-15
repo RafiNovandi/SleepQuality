@@ -58,12 +58,15 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.muhammadrafinovandi0108.sleepquality.R
 import com.muhammadrafinovandi0108.sleepquality.ui.theme.SleepQualityTheme
+import com.muhammadrafinovandi0108.sleepquality.util.ViewModelFactory
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(navController: NavHostController, id: Long? = null) {
     val context = LocalContext.current
+    val factory = ViewModelFactory(context)
+    val viewModel: DetailViewModel = viewModel(factory = factory)
     val activity = context as? androidx.appcompat.app.AppCompatActivity
 
     val jamTidur = rememberSaveable { mutableIntStateOf(0) }
@@ -88,33 +91,30 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
     var jamTidurError by remember { mutableStateOf(false) }
     var jamBangunError by remember { mutableStateOf(false) }
 
-
-    val viewModel: MainViewModel = viewModel()
     val isEditMode = id != null
+    var isLoaded by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(id) {
-        if (id != null) {
-            val data = viewModel.getDataTidur(id) ?: return@LaunchedEffect
+        if (id == null || isLoaded) return@LaunchedEffect
 
-            val (jamT, menitT) = data.jamTidur.split(":")
-            val (jamB, menitB) = data.jamBangun.split(":")
+        val data = viewModel.getById(id) ?: return@LaunchedEffect
 
-            jamTidur.intValue = jamT.toInt()
-            menitTidur.intValue = menitT.toInt()
+        waktuTidur.value = data.jamTidur
+        waktuBangun.value = data.jamBangun
+        kelompok = data.kategori
+        durasiTidur = data.durasi
+        statusTidur = data.status
 
-            jamBangun.intValue = jamB.toInt()
-            menitBangun.intValue = menitB.toInt()
+        val (jamT, menitT) = data.jamTidur.split(":")
+        val (jamB, menitB) = data.jamBangun.split(":")
 
-            waktuTidur.value = data.jamTidur
-            waktuBangun.value = data.jamBangun
+        jamTidur.intValue = jamT.toInt()
+        menitTidur.intValue = menitT.toInt()
+        jamBangun.intValue = jamB.toInt()
+        menitBangun.intValue = menitB.toInt()
 
-            kelompok = data.kategori
-
-            durasiTidur = data.durasi * 60
-            statusTidur = data.status
-        }
+        isLoaded = true
     }
-
 
     Scaffold(
         topBar = {
@@ -260,26 +260,43 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                     )
                 }
             }
-            if (!isEditMode) {
-                Button(
-                    onClick = {
-                        jamTidurError = (waktuTidur.value == "Masukan Jam")
-                        jamBangunError = (waktuBangun.value == "Masukan Jam")
-                        if (jamTidurError || jamBangunError) return@Button
+            Button(
+                onClick = {
+                    jamTidurError = (waktuTidur.value == "Masukan Jam")
+                    jamBangunError = (waktuBangun.value == "Masukan Jam")
+                    if (jamTidurError || jamBangunError) return@Button
 
-                        val totalMenit = hitungDurasi(
-                            jamTidur.intValue, menitTidur.intValue,
-                            jamBangun.intValue, menitBangun.intValue
+                    val totalMenit = hitungDurasi(
+                        jamTidur.intValue, menitTidur.intValue,
+                        jamBangun.intValue, menitBangun.intValue
+                    )
+
+                    durasiTidur = totalMenit
+                    statusTidur = getTidurStatus(totalMenit / 60, kelompok, radioOptions)
+
+                    if (isEditMode) {
+                        viewModel.update(
+                            id = id!!,
+                            jamTidur = waktuTidur.value,
+                            jamBangun = waktuBangun.value,
+                            kategori = kelompok,
+                            durasi = durasiTidur,
+                            status = statusTidur
                         )
-
-                        durasiTidur = totalMenit
-                        statusTidur = getTidurStatus(totalMenit / 60, kelompok, radioOptions)
-                    },
-                    modifier = Modifier.padding(top = 8.dp),
-                    contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
-                ) {
-                    Text(text = stringResource(R.string.hitung))
-                }
+                    } else {
+                        viewModel.insert(
+                            jamTidur = waktuTidur.value,
+                            jamBangun = waktuBangun.value,
+                            kategori = kelompok,
+                            durasi = durasiTidur,
+                            status = statusTidur
+                        )
+                    }
+                },
+                modifier = Modifier.padding(top = 8.dp),
+                contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
+            ) {
+                Text(text = stringResource(R.string.hitung))
             }
 
             if (statusTidur !=0 ){
@@ -412,7 +429,6 @@ private fun shareData(context: Context, message: String) {
         context.startActivity(shareIntent)
     }
 }
-
 
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)

@@ -16,5 +16,11 @@ interface DataTidurDao {
     suspend fun update(datatidur: DataTidur)
 
     @Query("SELECT * FROM datatidur ORDER BY tanggal DESC")
-    fun getDataTidur(): Flow<DataTidur>
+    fun getDataTidur(): Flow<List<DataTidur>>
+
+    @Query("SELECT * FROM datatidur WHERE id = :id")
+    suspend fun getById(id: Long): DataTidur?
+
+    @Query("DELETE FROM datatidur WHERE id = :id")
+    suspend fun deleteById(id: Long)
 }
