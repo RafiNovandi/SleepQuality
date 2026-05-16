@@ -361,7 +361,9 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
     }
     if (id != null && showDialog) {
         DisplayAlertDialog(
-            onDismissRequest = { showDialog = false }) {
+            mode = DeleteMode.SOFT_DELETE,
+            onDismissRequest = { showDialog = false }
+        ) {
             showDialog = false
             viewModel.delete(id)
             navController.popBackStack()

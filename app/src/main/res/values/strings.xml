@@ -29,8 +29,12 @@
     <string name="lainnya">More Options</string>
     <string name="hapus">Delete Data</string>
     <string name="pesan_hapus">Move this data to trash?</string>
+    <string name="pesan_hapus_permanen">Permanently delete this data?\nData will be deleted and cannot be restored.</string>
     <string name="tombol_hapus">Move to Trash</string>
     <string name="tombol_batal">Cencel</string>
     <string name="list">List View</string>
     <string name="grid">Grid View</string>
+    <string name="sampah_kosong">Empty Trash</string>
+    <string name="pulihkan">Restore</string>
+    <string name="hapus_permanen">Delete Permanent</string>
 </resources>

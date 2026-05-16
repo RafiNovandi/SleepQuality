@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.muhammadrafinovandi0108.sleepquality.model.DataTidur
 
-@Database(entities = [DataTidur::class], version = 1, exportSchema = false)
+@Database(entities = [DataTidur::class], version = 2, exportSchema = false)
 abstract class DataTidurDb : RoomDatabase() {
     abstract val dao: DataTidurDao
 
@@ -23,7 +23,9 @@ abstract class DataTidurDb : RoomDatabase() {
                         context.applicationContext,
                         DataTidurDb::class.java,
                         "datatidur.db"
-                    ).build()
+                    )
+                        .fallbackToDestructiveMigration(true)
+                        .build()
                     INSTANCE = instance
                 }
                 return instance

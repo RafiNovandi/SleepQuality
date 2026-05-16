@@ -10,16 +10,37 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.muhammadrafinovandi0108.sleepquality.R
 import com.muhammadrafinovandi0108.sleepquality.ui.theme.SleepQualityTheme
 
+
+enum class DeleteMode {
+    SOFT_DELETE,
+    HARD_DELETE
+}
 @Composable
 fun DisplayAlertDialog(
+    mode: DeleteMode,
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit
 ) {
+    val pesan = when(mode) {
+        DeleteMode.SOFT_DELETE ->
+            stringResource(R.string.pesan_hapus)
+
+        DeleteMode.HARD_DELETE ->
+            stringResource(R.string.pesan_hapus_permanen)
+    }
+
+    val tombol = when(mode) {
+        DeleteMode.SOFT_DELETE ->
+            stringResource(R.string.tombol_hapus)
+
+        DeleteMode.HARD_DELETE ->
+            stringResource(R.string.hapus_permanen)
+    }
     AlertDialog(
-        text = { Text(text = stringResource(R.string.pesan_hapus)) },
+        text = { Text(text = pesan) },
         confirmButton = {
             TextButton(onClick = {onConfirmation() }) {
-                Text(text = stringResource(R.string.tombol_hapus))
+                Text(text = tombol)
             }
         },
         dismissButton = {
@@ -38,6 +59,7 @@ fun DisplayAlertDialog(
 fun DialogPreview() {
     SleepQualityTheme {
         DisplayAlertDialog(
+            mode = DeleteMode.SOFT_DELETE,
             onDismissRequest = {},
             onConfirmation = {}
         )

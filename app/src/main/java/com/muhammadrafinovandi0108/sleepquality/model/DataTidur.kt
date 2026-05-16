@@ -12,5 +12,6 @@ data class DataTidur(
     val jamBangun: String,
     val kategori: String,
     val durasi: Int,
-    val status: Int
+    val status: Int,
+    var isDeleted: Int = 0
 )

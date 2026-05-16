@@ -30,8 +30,12 @@
     <string name="lainnya">Opsi lainnya</string>
     <string name="hapus">Hapus Data</string>
     <string name="pesan_hapus">Pindahkan data ini ke sampah?</string>
+    <string name="pesan_hapus_permanen">Hapus Permanen data ini?\nData akan dihapus permanen dan tidak bisa dikembalikan.</string>
     <string name="tombol_hapus">Pindahkan ke Sampah</string>
     <string name="tombol_batal">Batal</string>
     <string name="list">Tampilan List</string>
     <string name="grid">Tampilan Grid</string>
+    <string name="sampah_kosong">Sampah Kosong</string>
+    <string name="pulihkan">Pulihkan</string>
+    <string name="hapus_permanen">Hapus Permanen</string>
 </resources>
