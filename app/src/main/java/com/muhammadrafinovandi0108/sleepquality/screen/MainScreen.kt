@@ -1,8 +1,10 @@
 package com.muhammadrafinovandi0108.sleepquality.screen
 
-import android.content.res.Configuration
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bedtime
@@ -31,23 +33,24 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.muhammadrafinovandi0108.sleepquality.R
+import com.muhammadrafinovandi0108.sleepquality.chart.ComposeBasicLineChart
 import com.muhammadrafinovandi0108.sleepquality.navigasi.Screen
-import com.muhammadrafinovandi0108.sleepquality.ui.theme.SleepQualityTheme
 import com.muhammadrafinovandi0108.sleepquality.util.SettingsDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.foundation.shape.RoundedCornerShape
 
 data class BottomNavigationItem(
     val title: String,
@@ -58,7 +61,7 @@ data class BottomNavigationItem(
 )
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController: NavHostController) {
+fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
     val context = LocalContext.current
     val dataStore = SettingsDataStore(context)
     val showList by dataStore.layoutFlow.collectAsState(initial = true)
@@ -153,7 +156,6 @@ fun MainScreen(navController: NavHostController) {
                         selected = selectedItemIndex == index,
                         onClick = {
                             selectedItemIndex = index
-                            //navController.navigate(item.title)
                                   },
                         label = {
                             Text(text = item.title)
@@ -194,7 +196,7 @@ fun MainScreen(navController: NavHostController) {
             when(selectedItemIndex) {
 
                 0 -> {
-                    HomeContent(navController)
+                    HomeContent(navController = navController, viewModel = viewModel)
                 }
 
                 1 -> {
@@ -210,28 +212,47 @@ fun MainScreen(navController: NavHostController) {
 }
 
 @Composable
-fun HomeContent(navController: NavHostController) {
+fun HomeContent(
+    navController: NavHostController,
+    viewModel: MainViewModel
+) {
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+    val dataTidur by viewModel.dataTidur.collectAsState()
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
+        Text(
+            text = "Statistik Tidur",
+            style = MaterialTheme.typography.titleLarge
+        )
+        Card(
+            modifier = Modifier
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface
+            )
+        ) {
+            ComposeBasicLineChart(
+                dataTidur = dataTidur,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )
+        }
         Button(
             onClick = {
                 navController.navigate(Screen.FormBaru.route)
-            }
+            },
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text("Tambah Data Tidur")
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-@Composable
-fun MainScreenPreview() {
-    SleepQualityTheme {
-        MainScreen(rememberNavController())
     }
 }

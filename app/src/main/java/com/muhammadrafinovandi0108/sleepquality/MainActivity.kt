@@ -4,16 +4,22 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.muhammadrafinovandi0108.sleepquality.navigasi.SetupNavGraph
+import com.muhammadrafinovandi0108.sleepquality.screen.MainViewModel
 import com.muhammadrafinovandi0108.sleepquality.ui.theme.SleepQualityTheme
+import com.muhammadrafinovandi0108.sleepquality.util.ViewModelFactory
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val viewModel: MainViewModel = viewModel(
+                factory = ViewModelFactory(applicationContext)
+            )
             SleepQualityTheme {
-                SetupNavGraph()
+                SetupNavGraph(viewModel = viewModel)
             }
         }
     }

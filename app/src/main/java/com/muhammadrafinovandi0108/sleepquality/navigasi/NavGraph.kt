@@ -11,15 +11,16 @@ import com.muhammadrafinovandi0108.sleepquality.screen.AboutScreen
 import com.muhammadrafinovandi0108.sleepquality.screen.BedtimeScreen
 import com.muhammadrafinovandi0108.sleepquality.screen.DetailScreen
 import com.muhammadrafinovandi0108.sleepquality.screen.MainScreen
+import com.muhammadrafinovandi0108.sleepquality.screen.MainViewModel
 
 @Composable
-fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
+fun SetupNavGraph(navController: NavHostController = rememberNavController(), viewModel: MainViewModel) {
     NavHost(
         navController = navController,
         startDestination = Screen.Home.route
     ) {
         composable( route = Screen.Home.route ) {
-            MainScreen(navController)
+            MainScreen(navController = navController, viewModel = viewModel)
         }
         composable(route = Screen.About.route) {
             AboutScreen(navController)

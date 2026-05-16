@@ -6,11 +6,7 @@ plugins {
 
 android {
     namespace = "com.muhammadrafinovandi0108.sleepquality"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.muhammadrafinovandi0108.sleepquality"
@@ -56,9 +52,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.ui)
     implementation(libs.vico.compose)
-    implementation(libs.vico.compose.m2)
     implementation(libs.vico.compose.m3)
-    implementation(libs.vico.views)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.datastore.preferences)
