@@ -66,9 +66,8 @@ fun BedtimeScreen(navController: NavHostController) {
                 )
             }
         }
-    ) {
-        innerPadding ->
-        ScreenContent(Modifier.padding(innerPadding), navController = navController, showList = showList)
+    ) { innerPadding ->
+        ScreenContent(modifier = Modifier.fillMaxSize().padding(innerPadding), navController = navController, showList = showList)
     }
 }
 
@@ -96,7 +95,8 @@ fun ScreenContent(
         if (showList) {
             LazyColumn(
                 modifier = modifier.fillMaxSize(),
-                contentPadding = PaddingValues(bottom = 84.dp)
+                contentPadding = PaddingValues(),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(data) { item ->
                     ListItem(
@@ -105,7 +105,6 @@ fun ScreenContent(
                             navController.navigate(Screen.FormEdit.withId(item.id))
                         }
                     )
-                    HorizontalDivider()
                 }
             }
         } else {
@@ -133,22 +132,34 @@ fun ScreenContent(
 fun ListItem(dataTidur: DataTidur, onClick: () -> Unit) {
     val jam = dataTidur.durasi / 60
     val menit = dataTidur.durasi % 60
-    Column(
-        modifier = Modifier.fillMaxWidth()
-            .clickable {onClick() }
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 6.dp)
+            .clickable { onClick() },
+        shape = MaterialTheme.shapes.medium,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Text(
-            text = dataTidur.tanggal,
-            fontWeight = FontWeight.Bold
-        )
-        Text(
-            text = "Durasi Tidur: $jam Jam $menit Menit"
-        )
-        Text(
-            text = stringResource(id = dataTidur.status)
-        )
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Text(
+                text = dataTidur.tanggal,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "Durasi Tidur: $jam Jam $menit Menit"
+            )
+            Text(
+                text = stringResource(id = dataTidur.status),
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
     }
 }
 
@@ -160,8 +171,7 @@ fun GridItem(dataTidur: DataTidur, onClick: () -> Unit) {
         modifier = Modifier.fillMaxWidth().clickable { onClick() },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
-        ),
-        border = BorderStroke(1.dp, DividerDefaults.color)
+        )
     ) {
         Column(
             modifier = Modifier.padding(8.dp),
@@ -174,7 +184,9 @@ fun GridItem(dataTidur: DataTidur, onClick: () -> Unit) {
                 text = "Durasi Tidur: $jam Jam $menit Menit"
             )
             Text(
-                text = stringResource(id = dataTidur.status)
+                text = stringResource(id = dataTidur.status),
+                color = MaterialTheme.colorScheme.primary
+
             )
         }
     }

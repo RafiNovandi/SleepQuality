@@ -2,6 +2,7 @@ package com.muhammadrafinovandi0108.sleepquality.screen
 
 import android.content.res.Configuration
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -21,36 +22,40 @@ fun DisplayAlertDialog(
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit
 ) {
-    val pesan = when(mode) {
-        DeleteMode.SOFT_DELETE ->
-            stringResource(R.string.pesan_hapus)
-
-        DeleteMode.HARD_DELETE ->
-            stringResource(R.string.pesan_hapus_permanen)
+    val pesan = when (mode) {
+        DeleteMode.SOFT_DELETE -> stringResource(R.string.pesan_hapus)
+        DeleteMode.HARD_DELETE -> stringResource(R.string.pesan_hapus_permanen)
     }
 
-    val tombol = when(mode) {
-        DeleteMode.SOFT_DELETE ->
-            stringResource(R.string.tombol_hapus)
-
-        DeleteMode.HARD_DELETE ->
-            stringResource(R.string.hapus_permanen)
+    val tombol = when (mode) {
+        DeleteMode.SOFT_DELETE -> stringResource(R.string.tombol_hapus)
+        DeleteMode.HARD_DELETE -> stringResource(R.string.hapus_permanen)
     }
     AlertDialog(
-        text = { Text(text = pesan) },
+        text = {
+            Text(
+                text = pesan,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        },
         confirmButton = {
-            TextButton(onClick = {onConfirmation() }) {
-                Text(text = tombol)
+            TextButton(onClick = onConfirmation) {
+                Text(
+                    text = tombol,
+                    style = MaterialTheme.typography.labelLarge
+                )
             }
         },
         dismissButton = {
-            TextButton(onClick = { onDismissRequest() }) {
-                Text(text = stringResource(R.string.tombol_batal))
+            TextButton(onClick = onDismissRequest) {
+                Text(
+                    text = stringResource(R.string.tombol_batal),
+                    style = MaterialTheme.typography.labelLarge
+                )
             }
         },
-        onDismissRequest = { onDismissRequest() }
+        onDismissRequest = onDismissRequest
     )
-
 }
 
 @Preview(showBackground = true)

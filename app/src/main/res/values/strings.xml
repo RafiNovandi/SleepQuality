@@ -37,4 +37,6 @@
     <string name="sampah_kosong">Empty Trash</string>
     <string name="pulihkan">Restore</string>
     <string name="hapus_permanen">Delete Permanent</string>
+    <string name="tambah_data_tidur">Add Sleep Data</string>
+    <string name="statistik_tidur">Sleep Statistics</string>
 </resources>

@@ -15,10 +15,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val viewModel: MainViewModel = viewModel(
-                factory = ViewModelFactory(applicationContext)
-            )
             SleepQualityTheme {
+                val viewModel: MainViewModel = viewModel(
+                    factory = ViewModelFactory(applicationContext)
+                )
                 SetupNavGraph(viewModel = viewModel)
             }
         }

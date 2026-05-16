@@ -227,14 +227,14 @@ fun HomeContent(
     ) {
 
         Text(
-            text = "Statistik Tidur",
+            text = stringResource(R.string.statistik_tidur),
             style = MaterialTheme.typography.titleLarge
         )
         Card(
             modifier = Modifier
                 .fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface
             )
@@ -252,7 +252,7 @@ fun HomeContent(
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Tambah Data Tidur")
+            Text(text = stringResource(R.string.tambah_data_tidur))
         }
     }
 }

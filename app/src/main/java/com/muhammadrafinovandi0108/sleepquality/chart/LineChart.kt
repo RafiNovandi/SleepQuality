@@ -24,23 +24,18 @@ fun ComposeBasicLineChart(
     }
 
     LaunchedEffect(dataTidur) {
-        val durasiTidur = if (dataTidur.isNotEmpty()) {
-            dataTidur.map { item ->
-                item.durasi / 60f
-            }
-        } else {
-            listOf(0f)
-        }
+        val series = dataTidur.map { it.durasi / 60f }
         modelProducer.runTransaction {
             lineSeries {
-                series(durasiTidur)
+                series(series.ifEmpty { listOf(0f) })
             }
         }
     }
     val lineLayer = rememberLineCartesianLayer()
     val startAxis = VerticalAxis.rememberStart(
         valueFormatter = { _, value, _ ->
-            "${value.toInt()}h"
+            val number = (value as? Number)?.toFloat() ?: 0f
+            "${number.toInt()}h"
         }
     )
     CartesianChartHost(
