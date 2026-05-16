@@ -32,4 +32,6 @@
     <string name="pesan_hapus">Pindahkan data ini ke sampah?</string>
     <string name="tombol_hapus">Pindahkan ke Sampah</string>
     <string name="tombol_batal">Batal</string>
+    <string name="list">Tampilan List</string>
+    <string name="grid">Tampilan Grid</string>
 </resources>
